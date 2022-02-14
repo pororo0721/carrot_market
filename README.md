@@ -13,11 +13,11 @@ yarn create next-app
 
 ### NextJS, React latest version installed (React 18 version as of Feb. 2022)
 
-npm i next@latest react@rc react-dom@rc
+```bash npm i next@latest react@rc react-dom@rc ```
 
 ## Get started with Tailwind CSS
 
-npm install -D tailwindcss postcss autoprefixer
+```bash npm install -D tailwindcss postcss autoprefixer ```
 
 ## After the installation is complete:
 
