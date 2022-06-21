@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 
 // Less code
 // Better validation
@@ -7,14 +7,35 @@ import { useForm } from "react-hook-form";
 // Dont deal with events
 //  Easier Inputs
 
+interface LoginForm{
+    username: string;
+    password: string;
+    email: string;
+}
+
 export default function Forms() {
-    const {register, watch} = useForm();
-    
+    const {register, handleSubmit} = useForm<LoginForm>();
+    const onValid = (data:LoginForm) =>{
+        console.log('valid');
+    };
+    const onInvalid = (errors:FieldErrors) =>{
+        console.log('invalid', errors);
+    }
     return(
-        <form >
-            <input {...register("username")} type="text" placeholder="Username" required />
-            <input {...register("email")} type="email" placeholder="Email" required />
-            <input {...register("password")} type="password" placeholder="Password" required/>
+        <form onSubmit={handleSubmit(onValid, onInvalid)}>
+            <input {...register("username", {
+                required: "Username is required",
+                minLength: {
+                    value: 5,
+                    message: "Username must be at least 5 characters"
+                }
+            })} type="text" placeholder="Username"  />
+            <input {...register("email", {
+                required: "Email is required",
+            })} type="email" placeholder="Email"  />
+            <input {...register("password", {
+                required: "Password is required",
+            })} type="password" placeholder="Password" />
             <input type="submit" value="Submit" />
         </form>
         
