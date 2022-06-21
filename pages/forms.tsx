@@ -1,11 +1,11 @@
 import { FieldErrors, useForm } from "react-hook-form";
 
-// Less code
-// Better validation
+
+
 // Better errors(set, clear, display   )
 // Have control over inputs
-// Dont deal with events
-//  Easier Inputs
+
+
 
 interface LoginForm{
     username: string;
@@ -14,13 +14,16 @@ interface LoginForm{
 }
 
 export default function Forms() {
-    const {register, handleSubmit} = useForm<LoginForm>();
+    const {register, handleSubmit, formState: {errors}} = useForm<LoginForm>({
+        mode: "onChange",
+    });
     const onValid = (data:LoginForm) =>{
         console.log('valid');
     };
     const onInvalid = (errors:FieldErrors) =>{
         console.log('invalid', errors);
     }
+
     return(
         <form onSubmit={handleSubmit(onValid, onInvalid)}>
             <input {...register("username", {
@@ -32,7 +35,11 @@ export default function Forms() {
             })} type="text" placeholder="Username"  />
             <input {...register("email", {
                 required: "Email is required",
-            })} type="email" placeholder="Email"  />
+                validate:{
+                    notGmail: (value) => !value.includes("@gmail.com") || "Must not be a gmail account"
+                }
+            })} type="email" placeholder="Email" className={`${Boolean(errors.email?.message) ? "border-x-red-500":""}`} />
+            {errors.email?.message}
             <input {...register("password", {
                 required: "Password is required",
             })} type="password" placeholder="Password" />
