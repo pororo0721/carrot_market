@@ -5,11 +5,18 @@ import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
 import Head from "next/head";
 import useSWR from "swr";
-import products from "./api/products";
+import { Product } from "@prisma/client";
+
+interface ProductResponse {
+  ok:boolean;
+  products: Product[]
+}
+
+
 
 const Home: NextPage = () => {
   const {user,isLoading} = useUser();
-  const {data} = useSWR("/api/products")
+  const {data} = useSWR<ProductResponse>("/api/products")
   console.log(data);
   return (
     <Layout title="홈" hasTabBar>
