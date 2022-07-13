@@ -30,7 +30,7 @@ const ItemDetail: NextPage = () => {
   const onFavoriteClick = () => {
     if (!data) return;
     boundMutate (prev=> prev&& ({...prev, isLiked: !prev.isLiked}), false);
-    // unbound mutate
+    // unbound mutate (다른 화면의 데이터를 변경하길 원할때)
     // mutate("/api/users/me", (prev:any) =>({ok: !prev.ok}), false)
     toggleFav({});
   }
