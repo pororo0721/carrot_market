@@ -10,6 +10,7 @@ async function handler(
 ) {
   const {
     query: { id },
+    session:{user},
   } = req;
 
 client.$queryRaw`SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';`.then(
@@ -47,9 +48,19 @@ client.$queryRaw`SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_
               },
             },
           });
+        const isWondering = Boolean (await client.wondering.findFirst({
+          where:{
+            postId: +id.toString(),
+            userId: user?.id,
+          },
+          select: {
+            id:true,
+          },
+         })); 
           res.json({
             ok: true,
             post,
+            isWondering,
           });
         }
 );
