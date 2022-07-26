@@ -13,7 +13,15 @@ const favs = await client.fav.findMany({
         userId:user?.id
     },
     include:{
-        product:true
+        product: {
+          include: {
+            _count: {
+              select: {
+                favs: true,
+              },
+            },
+          },
+        },
     }, 
 })
   res.json({
