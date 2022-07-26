@@ -8,17 +8,17 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
 const {session:{user},}=req;
-const favs = await client.fav.findMany({
+const sales= await client.sale.findMany({
     where: {
         userId:user?.id
     },
     include:{
         product:true
-    }, 
+    },  
 })
   res.json({
     ok: true,
-    favs,
+    sales,
   });
 }
 
