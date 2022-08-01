@@ -7,17 +7,29 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-const {
-   query:{id}
-} = req;
-
-const stream = await client.stream.findUnique({
-    where:{
-        id: +id.toString(),
+  const {
+    query: { id },
+  } = req;
+  const stream = await client.stream.findUnique({
+    where: {
+      id: +id.toString(),
     },
-});
-    res.json({ok:true, stream});
-
+    include: {
+      messages: {
+        select: {
+          id: true,
+          message: true,
+          user: {
+            select: {
+              avatar: true,
+              id: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  res.json({ ok: true, stream });
 }
 
 export default withApiSession(
