@@ -39,6 +39,8 @@ client.$queryRaw`SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_
                     },
                   },
                 },
+                take: 10,
+                skip: 20,
               },
               _count: {
                 select: {
