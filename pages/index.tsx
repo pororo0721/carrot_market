@@ -6,8 +6,10 @@ import useUser from "@libs/client/useUser";
 import Head from "next/head";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
+import Pagenation from "@components/pagination";
+import usePage from "@libs/client/usePage";
 
-export interface ProductWithCount extends Product {
+export interface ProductWithCounts extends Product {
   _count: {
     favs: number;
   };
@@ -15,22 +17,22 @@ export interface ProductWithCount extends Product {
 
 interface ProductResponse {
   ok:boolean;
-  products: Product[]
+  list: ProductWithCounts[];
 }
 
 
 
 const Home: NextPage = () => {
   const {user,isLoading} = useUser();
-  const {data} = useSWR<ProductResponse>("/api/products")
-  console.log(data);
+  const [{ data: dataJson }, pagination] =
+  usePage<ProductWithCounts>("/api/products");
   return (
     <Layout title="홈" hasTabBar>
        <Head>
         <title>Home</title>
       </Head>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products?.map((product) => (
+      {dataJson?.list?.map((product) => (
           <Item
             id={product.id}
             key={product.id}
@@ -57,6 +59,7 @@ const Home: NextPage = () => {
             />
           </svg>
         </FloatingButton>
+        <Pagenation {...pagination} />
       </div>
     </Layout>
   );

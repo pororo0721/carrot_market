@@ -9,6 +9,7 @@ async function handler(
 ) {
 const {
     session:{user},
+    query:{page},
     body:{name, price, description},
 } = req;
 console.log(price)
@@ -27,8 +28,11 @@ if(req.method === "POST"){
     });
     res.json({ok:true, stream});
 } else if(req.method === "GET") {
-  const streams = await client.stream.findMany();
-  res.json({ok:true, streams});
+  const list = await client.stream.findMany({
+    take: 20,
+    skip: +page * 10,
+  });
+  res.json({ ok: true, list });
 }
 }
 

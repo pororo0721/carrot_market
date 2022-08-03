@@ -35,55 +35,56 @@ const Stream: NextPage = () => {
   const { user } = useUser();
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm<MessageForm>();
-  const { data, mutate } = useSWR<StreamResponse>(
-    router.query.id ? `/api/streams/${router.query.id}` : null,
-    {
-      refreshInterval: 1000,
-    }
-  );
-  const [sendMessage, { loading, data: sendMessageData }] = useMutation(
+  const [mutMSG, { data: jsonMSG, loading }] = useMutation(
     `/api/streams/${router.query.id}/messages`
   );
   const onValid = (form: MessageForm) => {
+    console.log("form : ", form);
     if (loading) return;
     reset();
-    mutate(prev=> 
-      prev && {...prev, 
-        stream: {...prev.stream, 
-          messages: [...prev.stream.messages, 
-            {id: Date.now(), 
-              message: form.message, 
-              user:{...user},
-            },
-          ],
+    flash(
+      (prev) =>
+        prev && {
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              { message: form.message, id: Date.now(), user },
+            ],
+          } as any,
         },
-      } as any
-      ,false);
-    // sendMessage(form);
+      false
+    );
+    // mutMSG(form);
   };
+  const { data: jsonPage, mutate: flash } = useSWR<StreamResponse>(
+    router.query.id ? `/api/streams/${router.query.id}` : null,
+    { refreshInterval: 1000 }
+  );
   return (
     <Layout canGoBack>
       <div className="py-10 px-4  space-y-4">
         <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />
         <div className="mt-5">
           <h1 className="text-3xl font-bold text-gray-900">
-            {data?.stream?.name}
+          {jsonPage?.stream?.name}
           </h1>
           <span className="text-2xl block mt-3 text-gray-900">
-            ${data?.stream?.price}
+          &#8361;{jsonPage?.stream?.price}
           </span>
-          <p className=" my-6 text-gray-700">{data?.stream?.description}</p>
+          <p className=" my-6 text-gray-700">{jsonPage?.stream?.description}</p>
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
           <div className="py-10 pb-16 h-[50vh] overflow-y-scroll  px-4 space-y-4">
-            {data?.stream.messages.map((message) => (
-              <Message
-                key={message.id}
-                message={message.message}
-                reversed={message.user.id === user?.id}
-              />
-            ))}
+          {jsonPage?.stream?.messages.map((msg) => (
+        <Message
+          key={msg.id}
+          message={msg.message}
+          reversed={msg.user.id === user?.id}
+        />
+      ))}
           </div>
           <div className="fixed py-2 bg-white  bottom-0 inset-x-0">
             <form
