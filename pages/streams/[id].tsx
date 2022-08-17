@@ -63,7 +63,7 @@ const Stream: NextPage = () => {
     { refreshInterval: 1000 }
   );
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle="my_stream">
       <div className="py-10 px-4  space-y-4">
       {jsonPage?.stream.cloudflareId ? (
           <iframe
