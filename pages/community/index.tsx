@@ -107,7 +107,7 @@ const Community: NextPage<PostResponse> = ({posts}) => {
 //     props: {
 //       posts: JSON.parse(JSON.stringify(posts))
 //     },
-//     revalidate:10,
+
 //   }
 // }
 

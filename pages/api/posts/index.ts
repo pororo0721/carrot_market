@@ -59,6 +59,9 @@ async function handler(
         },
       },
     });
+
+    // await res.unstable_revalidate("/community");
+
     res.json ({
       ok:true,
       posts,
