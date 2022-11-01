@@ -6,6 +6,9 @@ import useSWR from "swr";
 import { Post, User } from "@prisma/client";
 import useCoords from "@libs/client/useCoords";
 import client from "@libs/server/client";
+import Pagenation from "@components/pagination";
+import usePage from "@libs/client/usePage";
+import { Product } from "@prisma/client";
 
 interface PostWithUser extends Post {
   user: User;
@@ -20,9 +23,17 @@ interface PostResponse {
   posts: PostWithUser[]
 }
 
+export interface ProductWithCounts extends Product {
+  _count: {
+    favs: number;
+  };
+}
+
 const Community: NextPage<PostResponse> = ({posts}) => {
   const {latitude, longitude} = useCoords();
   const { data } = useSWR<PostResponse>(latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null);
+  const [{ data: dataJson }, pagination] =
+  usePage<ProductWithCounts>("/api/products");
   return (
     <Layout hasTabBar title="동네생활">
       <div className="space-y-4 divide-y-[2px]">
@@ -94,6 +105,7 @@ const Community: NextPage<PostResponse> = ({posts}) => {
             ></path>
           </svg>
         </FloatingButton>
+        <Pagenation {...pagination} />
       </div>
     </Layout>
   );
