@@ -8,7 +8,8 @@ import useCoords from "@libs/client/useCoords";
 import client from "@libs/server/client";
 import Pagenation from "@components/pagination";
 import usePage from "@libs/client/usePage";
-import { Product } from "@prisma/client";
+import { useRouter } from "next/router";
+
 
 interface PostWithUser extends Post {
   user: User;
@@ -23,17 +24,21 @@ interface PostResponse {
   posts: PostWithUser[]
 }
 
-export interface ProductWithCounts extends Product {
-  _count: {
-    favs: number;
-  };
-}
+
+
 
 const Community: NextPage<PostResponse> = ({posts}) => {
   const {latitude, longitude} = useCoords();
   const { data } = useSWR<PostResponse>(latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null);
-  const [{ data: dataJson }, pagination] =
-  usePage<ProductWithCounts>("/api/products");
+  const {page, setPage} = usePage();
+  const router = useRouter();
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+    router.push(`/community?page=${page}`);
+  }
+
+
   return (
     <Layout hasTabBar title="동네생활">
       <div className="space-y-4 divide-y-[2px]">
@@ -66,7 +71,7 @@ const Community: NextPage<PostResponse> = ({posts}) => {
                       d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                   </svg>
-                  <span>궁금해요 {post._count?.wondering}</span>
+                  <span>👀 {post._count?.wondering}</span>
                 </span>
                 <span className="flex space-x-2 items-center text-sm">
                   <svg
@@ -83,7 +88,7 @@ const Community: NextPage<PostResponse> = ({posts}) => {
                       d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                     ></path>
                   </svg>
-                  <span>답변 {post._count?.answers}</span>
+                  <span>💬{post._count?.answers}</span>
                 </span>
               </div>
             </a>
@@ -105,7 +110,7 @@ const Community: NextPage<PostResponse> = ({posts}) => {
             ></path>
           </svg>
         </FloatingButton>
-        <Pagenation {...pagination} />
+        <Pagenation page={page} setPage={handlePageChange} />
       </div>
     </Layout>
   );
