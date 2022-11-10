@@ -10,6 +10,8 @@ import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 interface ProductWithUser extends Product {
   user: User;
@@ -60,7 +62,7 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             />
             <div>
               <p className="text-sm font-medium text-gray-700">
-                {product?.user?.name}
+                {data?.product?.user?.name}
               </p>
               <Link href={`/users/profiles/${product?.user?.id}`}>
                 <a className="text-xs font-medium text-gray-500">
@@ -71,12 +73,12 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
-              {product?.name}
+              {product?.name || <Skeleton width={200} />}
             </h1>
             <span className="text-2xl block mt-3 text-gray-900">
-              ${product?.price}
+              ${product?.price || <Skeleton width={100} />}
             </span>
-            <p className=" my-6 text-gray-700">{product?.description}</p>
+            <p className=" my-6 text-gray-700">{product?.description || <Skeleton/>}</p>
             <div className="flex items-center justify-between space-x-2">
               <Button large text="Talk to seller" />
               <button onClick={onFavoriteClick} 

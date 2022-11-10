@@ -9,6 +9,7 @@ import { Product } from "@prisma/client";
 import Pagenation from "@components/pagination";
 import usePage from "@libs/client/usePage";
 
+
 export interface ProductWithCounts extends Product {
   _count: {
     favs: number;
