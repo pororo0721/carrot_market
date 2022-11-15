@@ -84,12 +84,12 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
               <button onClick={onFavoriteClick} 
               className={cls(
                 "p-3 rounded-md flex items-center justify-center hover:bg-gray-100 ",
-                isLiked 
+                data?.isLiked
                 ? "text-red-500 hover:text-red-600"
                 : "text-gray-400 hover:bg-gray-500"
               )}
               >
-                {isLiked?(
+                {data?.isLiked?(
                         <svg
                               className="w-6 h-6"
                               fill="currentColor"

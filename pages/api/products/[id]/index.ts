@@ -34,10 +34,11 @@ async function handler(
             AND:{
                 id:{
                     not: product?.id,
-                }
-            }
+                },
+            },
         },
     });
+
     const isLiked = Boolean(
         await client.fav.findFirst ({
         where: {
