@@ -72,6 +72,10 @@ const CommunityPostDetail: NextPage = () => {
       mutate();
     }
   }, [answerData, reset, mutate]);
+  useEffect(() => {
+    if(data && !data.ok) {
+      router.push('/community');}
+      }, [data, router]); 
   return (
     <Layout canGoBack seoTitle="my_community">
       <div>

@@ -50,6 +50,7 @@ client.$queryRaw`SET SESSION sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_
               },
             },
           });
+        if(!post) res.status(404).json({ok:false, message:"Post not found"});
         const isWondering = Boolean (await client.wondering.findFirst({
           where:{
             postId: +id.toString(),
