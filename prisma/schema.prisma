@@ -32,7 +32,9 @@ model User{
   purchases       Purchase[]
   streams         Stream[]
   messages        Message[]
-
+  
+  sendMessages    ChatRoom[] @relation(name: "sendMessages")
+  receiveMessages ChatRoom[] @relation(name: "receiveMessages")
 }
 
 model Token{
@@ -59,6 +61,7 @@ model Product {
   favs  Fav[]
   sales           Sale[]
   purchases       Purchase[]
+  chats           ChatRoom[]
 
   @@index([userId])
 }
@@ -186,7 +189,26 @@ model Message {
   message     String  @db.MediumText
   stream  Stream @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId      Int
+  chatRoom  ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId      Int
 
   @@index([userId])
   @@index([streamId])
+}
+
+model ChatRoom{
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sendUser  User @relation(name: "sendMessages", fields: [sendUserId], references: [id], onDelete: Cascade)
+  sendUserId      Int
+  receiveUser  User @relation(name: "receiveMessages", fields: [receiveUserId], references: [id], onDelete: Cascade)
+  receiveUserId      Int
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  messages    Message[]
+  
+  @@index([sendUserId])
+  @@index([receiveUserId])
+  @@index([productId])
 }
