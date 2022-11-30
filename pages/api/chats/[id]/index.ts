@@ -1,60 +1,47 @@
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import client from "@libs/server/client";
-import withHandler, {ResponseType} from "@libs/server/withHandler";
+import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { withApiSession } from "@libs/server/withSession";
 
 async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<ResponseType>
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseType>
 ) {
-    const{
-        query: { id },
-        session:{user},
-    } =req;
+  const {
+    query: { id },
+    session: { user },
+  } = req;
 
-    const chatRoom = await client.chatRoom.findUnique({
-        where: {
-            id: Number(id),
-        },
-        include: {
-        sendUser: true,
-        receiveUser: true,
-        messages: {
-            select:{
-                id:true,
-                message:true,
-                createdAt:true,
-                user:{
-                    select:{
-                        id:true,
-                        name:true,
-                        avatar:true,
-    
-                    },
-            },
-        },
-},
-},
-});
-
-const product = await client.product.findUnique({
+  const chatRoom = await client.chatRoom.findUnique({
     where: {
-        id: chatRoom?.productId,
+      id: Number(id),
     },
-});
-
-if(chatRoom?.sendUserId === user?.id || chatRoom?.receiveUserId === user?.id){
+    include: {
+      sendUser: true,
+    receiveUser: true,
+      messages: {
+        select: {
+          id: true,
+          message: true,
+          user: true,
+        },
+      },
+    },
+  });
+  const product = await client.product.findUnique({
+    where: {
+      id: chatRoom?.productId,
+    },
+  });
+  if (chatRoom?.sendUser?.id === user?.id || chatRoom?.receiveUser?.id === user?.id) {
     res.json({
-        ok: true,
-        chatRoom,
-        product,
+      ok: true,
+      chatRoom,
+      product,
     });
-}else{
-    res.json({
-        ok: false,
-        error: "You are not authorized.",
-    });
-}
+  } else {
+    res.json({ ok: false });
+  }
 }
 
-export default withApiSession(withHandler({ methods: ["GET"], handler}));
+export default withApiSession(withHandler({ methods: ["GET"], handler }));
