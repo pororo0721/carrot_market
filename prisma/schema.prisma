@@ -194,6 +194,7 @@ model Messages {
 
   @@index([userId])
   @@index([streamId])
+   @@index([chatRoomId])
 }
 
 model ChatRoom{
@@ -207,8 +208,18 @@ model ChatRoom{
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   messages    Messages[]
+  notifications Notification[]
   
   @@index([sendUserId])
   @@index([receiveUserId])
   @@index([productId])
+}
+
+model Notification {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  chatRoomId Int
+  @@index([chatRoomId])
 }

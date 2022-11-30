@@ -6,6 +6,9 @@ import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 import useSWR from "swr";
+import { ChatRoom, Messages , Product, User } from "@prisma/client";
+import Link from "next/link";
+
 
 interface MessageForm {
   message: string;
@@ -43,9 +46,39 @@ const ChatDetail: NextPage = () => {
       {refreshInterval: 1000,
       revalidateOnFocus: true,
       });
-
+  const {data: userData}= useSWR('/api/users/me');
+  const lastMessage = data?.chatRoom?.messages[data?.chatRoom?.messages.length - 1];
+  const onValid = (validForm: MessageForm) => {
+    mutate(
+      (prev) =>
+        prev &&
+        ({
+          ...prev,
+          chatRoom: {
+            ...prev.chatRoom,
+            messages: [
+              ...prev.chatRoom.messages,
+              {
+                id: Date.now(),
+                message: validForm.message,
+                user: { ...userData.profile },
+              },
+            ],
+          },
+        } as any),
+      false
+    ); 
+    send(validForm);
+    if(chatId) {
+      reset();
+    };
+    useEffect(() => {
+      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [lastMessage]);
+  };
+  
   return (
-    <Layout canGoBack title="Steve" seoTitle="my_chat">
+    <Layout canGoBack hasTabBar>
       <div className="py-10 pb-16 px-4 space-y-4">
         <Message message="Hi how much are you selling them for?" />
         <Message message="I want ￦20,000" reversed />
