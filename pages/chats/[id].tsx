@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
+import useSWR from "swr";
 
 interface MessageForm {
   message: string;
@@ -15,12 +16,33 @@ interface MessageResponse {
   message: string;
 }
 
+interface MessageWithUser extends Messages {
+  user: User;
+}
+
+interface ChatRoomWith extends ChatRoom {
+  messages: MessageWithUser[];
+  sendUser: User;
+  receiveUser: User;
+  
+}
+
+interface ChatRoomResponse {
+  ok: boolean;
+  chatRoom: ChatRoomWith;
+  product: Product;
+}
+
 const ChatDetail: NextPage = () => {
   const router = useRouter();
   const chatId = router.query.id;
   const scrollRef = useRef<HTMLDivElement>(null);
   const {register, handleSubmit, reset} = useForm<MessageForm>();
   const [send] = useMutation<MessageResponse>(`/api/chats/${chatId}/messages`);
+  const {data, mutate} = useSWR<ChatRoomResponse>(chatId? `/api/chats/${chatId}` : null,
+      {refreshInterval: 1000,
+      revalidateOnFocus: true,
+      });
 
   return (
     <Layout canGoBack title="Steve" seoTitle="my_chat">

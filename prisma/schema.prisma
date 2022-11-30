@@ -31,7 +31,7 @@ model User{
   sales           Sale[]
   purchases       Purchase[]
   streams         Stream[]
-  messages        Message[]
+  messages        Messages[]
   
   sendMessages    ChatRoom[] @relation(name: "sendMessages")
   receiveMessages ChatRoom[] @relation(name: "receiveMessages")
@@ -172,7 +172,7 @@ model Stream {
   price       Int
   user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
-  messages    Message[]
+  messages    Messages[]
   cloudflareId  String
   cloudflareUrl String
   cloudflareKey String
@@ -180,7 +180,7 @@ model Stream {
   @@index([userId])
 }
 
-model Message {
+model Messages {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -206,7 +206,7 @@ model ChatRoom{
   receiveUserId      Int
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
-  messages    Message[]
+  messages    Messages[]
   
   @@index([sendUserId])
   @@index([receiveUserId])
