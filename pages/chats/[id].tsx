@@ -1,8 +1,27 @@
 import type { NextPage } from "next";
 import Layout from "@components/layout";
 import Message from "@components/message";
+import { useRouter } from "next/router";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
+import useMutation from "@libs/client/useMutation";
+
+interface MessageForm {
+  message: string;
+}
+
+interface MessageResponse {
+  ok: boolean;
+  message: string;
+}
 
 const ChatDetail: NextPage = () => {
+  const router = useRouter();
+  const chatId = router.query.id;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const {register, handleSubmit, reset} = useForm<MessageForm>();
+  const [send] = useMutation<MessageResponse>(`/api/chats/${chatId}/messages`);
+
   return (
     <Layout canGoBack title="Steve" seoTitle="my_chat">
       <div className="py-10 pb-16 px-4 space-y-4">
