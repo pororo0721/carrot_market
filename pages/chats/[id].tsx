@@ -8,6 +8,7 @@ import useMutation from "@libs/client/useMutation";
 import useSWR from "swr";
 import { ChatRoom, Messages , Product, User } from "@prisma/client";
 import Link from "next/link";
+import useDelete from "@libs/client/useDelete";
 
 
 interface MessageForm {
@@ -27,7 +28,6 @@ interface ChatRoomWith extends ChatRoom {
   messages: MessageWithUser[];
   sendUser: User;
   receiveUser: User;
-  
 }
 
 interface ChatRoomResponse {
@@ -38,16 +38,35 @@ interface ChatRoomResponse {
 
 const ChatDetail: NextPage = () => {
   const router = useRouter();
-  const chatId = router.query.id;
+  const chatRoomId = router.query.id;
   const scrollRef = useRef<HTMLDivElement>(null);
-  const {register, handleSubmit, reset} = useForm<MessageForm>();
-  const [send] = useMutation<MessageResponse>(`/api/chats/${chatId}/messages`);
-  const {data, mutate} = useSWR<ChatRoomResponse>(chatId? `/api/chats/${chatId}` : null,
-      {refreshInterval: 1000,
+  const { register, handleSubmit, reset } = useForm<MessageForm>();
+  const [send] = useMutation<MessageResponse>(
+    `/api/chatRoom/${chatRoomId}/messages`
+  );
+  const { data, mutate } = useSWR<ChatRoomResponse>(
+    chatRoomId ? `/api/chatRoom/${chatRoomId}` : null,
+    {
+      refreshInterval: 300,
       revalidateOnFocus: true,
-      });
-  const {data: userData}= useSWR('/api/users/me');
+    }
+  );
+  const { data: userData } = useSWR("/api/users/me");
+  const [countingNoti] = useMutation(`/api/chatRoom/notification`);
+  const [deleteNoti] = useDelete(`/api/chatRoom/notification`);
   const lastMessage = data?.chatRoom?.messages[data?.chatRoom?.messages.length - 1];
+  const deleteNotification = () => {
+    if (lastMessage?.user.id !== userData?.profile?.id) {
+      deleteNoti({ chatRoomId });
+    }
+  };
+  useEffect(() => {
+    if (chatRoomId && lastMessage) {
+      console.log("i'm running");
+      setInterval(deleteNotification, 3000);
+    }
+  }, [chatRoomId, lastMessage]);
+
   const onValid = (validForm: MessageForm) => {
     mutate(
       (prev) =>
@@ -67,15 +86,20 @@ const ChatDetail: NextPage = () => {
           },
         } as any),
       false
-    ); 
+    );
     send(validForm);
-    if(chatId) {
-      reset();
-    };
-    useEffect(() => {
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [lastMessage]);
+    if (chatRoomId) {
+      countingNoti({ chatRoomId });
+    }
+    reset();
   };
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, [data]);
   
   return (
     <Layout canGoBack hasTabBar>
