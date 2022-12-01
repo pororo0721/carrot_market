@@ -35,6 +35,7 @@ model User{
   
   sendMessages    ChatRoom[] @relation(name: "sendMessages")
   receiveMessages ChatRoom[] @relation(name: "receiveMessages")
+  ADs             AD[]
 }
 
 model Token{
@@ -62,6 +63,7 @@ model Product {
   sales           Sale[]
   purchases       Purchase[]
   chats           ChatRoom[]
+  ADs         AD[]
 
   @@index([userId])
 }
@@ -222,4 +224,18 @@ model Notification {
   chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId Int
   @@index([chatRoomId])
+}
+
+model AD {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId Int
+  phone     Int?
+  address   String?
+  @@index([userId])
+  @@index([productId])
 }

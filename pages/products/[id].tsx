@@ -1,17 +1,21 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Button from "@components/button";
+import SubmitBtn from "@components/button";
 import Layout from "@components/layout";
+import ProfileInfo from "@components/profile";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
-import { Product, User } from "@prisma/client";
+import { Product, User, ChatRoom } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
+import timeForToday from "@libs/client/timeForToday";
 import Image from "next/image";
 import client from "@libs/server/client";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 
 interface ProductWithUser extends Product {
   user: User;
@@ -23,6 +27,12 @@ interface ItemDetailResponse {
   isLiked: boolean;
 }
 
+interface MessageResponse {
+  ok: boolean;
+  chatRoom: ChatRoom;
+  isChatRoom?: ChatRoom;
+}
+
 const ItemDetail: NextPage<ItemDetailResponse> = ({
   product,
   relatedProducts,
@@ -31,10 +41,12 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
   const {user, isLoading} = useUser();
   const router = useRouter();
   const {mutate} = useSWRConfig();
+  const { id } = router.query;
   const { data, mutate:boundMutate } = useSWR<ItemDetailResponse>(
-    router.query.id ? `/api/products/${router.query.id}` : null
+    id ? `/api/products/${id}` : null
   );
-  const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
+  const { data: userData } = useSWR(`/api/users/me`);
+  const [toggleFav] = useMutation(`/api/products/${id}/fav`);
   const onFavoriteClick = () => {
     if (!data) return;
     boundMutate (prev=> prev&& ({...prev, isLiked: !prev.isLiked}), false);
@@ -42,6 +54,23 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     // mutate("/api/users/me", (prev:any) =>({ok: !prev.ok}), false)
     toggleFav({});
   }
+  const { handleSubmit } = useForm();
+  const [send, { data: chatRoomData, loading }] =
+    useMutation<MessageResponse>("/api/chats");
+  const onVaild = () => {
+    send(id);
+  };
+  useEffect(() => {
+    if (chatRoomData && chatRoomData?.chatRoom) {
+      router.push(`/chats/${chatRoomData.chatRoom?.id}`);
+    } else if (chatRoomData?.isChatRoom) {
+      router.push(`/chats/${chatRoomData.isChatRoom?.id}`);
+    }
+  }, [chatRoomData, router]);
+
+
+  
+
   return (
     <Layout canGoBack seoTitle="Product Detail">
       <div className="px-4  py-4">
@@ -60,15 +89,16 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
               src={`https://imagedelivery.net/jSdjqPvKO6f21nrvGjwl4w/${product?.user?.avatar}/avatar`}
               className="w-12 h-12 rounded-full bg-slate-300"
             />
-            <div>
-              <p className="text-sm font-medium text-gray-700">
-                {data?.product?.user?.name}
-              </p>
-              <Link href={`/users/profiles/${product?.user?.id}`}>
-                <a className="text-xs font-medium text-gray-500">
-                  View profile &rarr;
-                </a>
-              </Link>
+        <div className="pb-2 border-b">
+            <div className="flex justify-between items-center content-center">
+              <ProfileInfo
+                big
+                subtitle={timeForToday(data?.product?.createdAt)}
+                name={data?.product?.user?.name}
+                id={data?.product?.user?.id}
+                avatar={data?.product?.user?.avatar}
+                position={"mt-8"}
+              />
             </div>
           </div>
           <div className="mt-5">
@@ -80,7 +110,17 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             </span>
             <p className=" my-6 text-gray-700">{product?.description || <Skeleton/>}</p>
             <div className="flex items-center justify-between space-x-2">
-              <Button large text="Talk to seller" />
+            <form className="w-full" onSubmit={handleSubmit(onVaild)}>
+                <SubmitBtn
+                  position={`py-2`}
+                  title={loading ? "Loading...." : "Talk to seller"}
+                  mine={
+                    userData?.profile?.id === data?.product?.userId
+                      ? true
+                      : false
+                  }
+                />
+              </form>
               <button onClick={onFavoriteClick} 
               className={cls(
                 "p-3 rounded-md flex items-center justify-center hover:bg-gray-100 ",
