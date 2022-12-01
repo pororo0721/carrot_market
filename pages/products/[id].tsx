@@ -1,7 +1,6 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import SubmitBtn from "@components/button";
 import Layout from "@components/layout";
-import ProfileInfo from "@components/profile";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
@@ -9,7 +8,6 @@ import { Product, User, ChatRoom } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
-import timeForToday from "@libs/client/timeForToday";
 import Image from "next/image";
 import client from "@libs/server/client";
 import Skeleton from 'react-loading-skeleton'
@@ -68,9 +66,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
     }
   }, [chatRoomData, router]);
 
-
-  
-
   return (
     <Layout canGoBack seoTitle="Product Detail">
       <div className="px-4  py-4">
@@ -89,16 +84,15 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
               src={`https://imagedelivery.net/jSdjqPvKO6f21nrvGjwl4w/${product?.user?.avatar}/avatar`}
               className="w-12 h-12 rounded-full bg-slate-300"
             />
-        <div className="pb-2 border-b">
-            <div className="flex justify-between items-center content-center">
-              <ProfileInfo
-                big
-                subtitle={timeForToday(data?.product?.createdAt)}
-                name={data?.product?.user?.name}
-                id={data?.product?.user?.id}
-                avatar={data?.product?.user?.avatar}
-                position={"mt-8"}
-              />
+            <div>
+              <p className="text-sm font-medium text-gray-700">
+                {data?.product?.user?.name}
+              </p>
+              <Link href={`/users/profiles/${product?.user?.id}`}>
+                <a className="text-xs font-medium text-gray-500">
+                  View profile &rarr;
+                </a>
+              </Link>
             </div>
           </div>
           <div className="mt-5">
