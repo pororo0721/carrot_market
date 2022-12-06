@@ -1,6 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import Layout from "@components/layout";
+import ProfileInfo from "@components/profile";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import Link from "next/link";
@@ -10,6 +11,7 @@ import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
+import timeForToday from "@libs/client/timeForToday";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useForm } from "react-hook-form";
@@ -77,23 +79,15 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             layout="fill"
           />
           </div>
-          <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-          <Image
-              width={48}
-              height={48}
-              src={`https://imagedelivery.net/jSdjqPvKO6f21nrvGjwl4w/${product?.user?.avatar}/avatar`}
-              className="w-12 h-12 rounded-full bg-slate-300"
+          <div className="flex justify-between items-center content-center">
+            <ProfileInfo
+              big
+              subtitle={timeForToday(data?.product?.createdAt)}
+              name={data?.product?.user?.name}
+              id={data?.product?.user?.id}
+              avatar={data?.product?.user?.avatar}
+              position={"mt-8"}
             />
-            <div>
-              <p className="text-sm font-medium text-gray-700">
-                {data?.product?.user?.name}
-              </p>
-              <Link href={`/users/profiles/${product?.user?.id}`}>
-                <a className="text-xs font-medium text-gray-500">
-                  View profile &rarr;
-                </a>
-              </Link>
-            </div>
           </div>
           <div className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">
@@ -103,6 +97,11 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
               ${product?.price || <Skeleton width={100} />}
             </span>
             <p className=" my-6 text-gray-700">{product?.description || <Skeleton/>}</p>
+            </div>
+          
+
+          <div className="mt-5">
+       
             <div className="flex items-center justify-between space-x-2">
             <form className="w-full" onSubmit={handleSubmit(onVaild)}>
                 <Button
