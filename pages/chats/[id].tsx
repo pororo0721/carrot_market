@@ -152,8 +152,8 @@ const ChatDetail: NextPage = () => {
               </div>
               <form className="mb-4" onSubmit={handleSubmit(onValid)}>
                 <Input
-                  name="message"
-                  kind="text"
+                  name="string"
+                  type="chat"
                   register={register("message", { required: true })}
                 />
               </form>

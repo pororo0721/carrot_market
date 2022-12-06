@@ -1,27 +1,45 @@
-import { cls } from "../libs/client/utils";
+import Image from "next/image";
+import React, { useRef } from "react";
 
 interface MessageProps {
-  message: string;
-  reversed?: boolean;
-  avatarUrl?: string;
+  text: string;
+  mine?: boolean;
+  avatar?: string | null;
 }
 
-export default function Message({
-  message,
-  avatarUrl,
-  reversed,
-}: MessageProps) {
+export default function Message({ text, mine, avatar }: MessageProps) {
   return (
-    <div
-      className={cls(
-        "flex  items-start",
-        reversed ? "flex-row-reverse space-x-reverse" : "space-x-2"
-      )}
-    >
-      <div className="w-8 h-8 rounded-full bg-slate-400" />
-      <div className="w-1/2 text-sm text-gray-700 p-2 border border-gray-300 rounded-md">
-        <p>{message}</p>
+    <>
+      <div
+        className={
+          mine
+            ? `flex items-start justify-start space-x-3 flex-row-reverse space-x-reverse`
+            : `flex items-start justify-start space-x-3`
+        }
+      >
+        {mine ? null : avatar ? (
+          <Image
+            width={40}
+            height={40}
+            alt="profile"
+            src={`https://imagedelivery.net/xE6X7mlbIExkQau-XHoj-A/${avatar}/profile`}
+            className="rounded-full bg-gray-300 z-0"
+            quality={100}
+          />
+        ) : (
+          <div className="rounded-full bg-gray-300 w-10 h-10" />
+        )}
+
+        <div
+          className={` px-4 py-2 w-1/2 shadow-sm rounded-3xl text-sm ${
+            mine
+              ? "bg-orange-400 text-white"
+              : "bg-gray-100  dark:text-gray-800"
+          }`}
+        >
+          <p>{text}</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
