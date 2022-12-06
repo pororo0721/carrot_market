@@ -69,6 +69,8 @@ const ChatDetail: NextPage = () => {
     }
   }, [chatRoomId, lastMessage]);
 
+  console.log(data?.product?.id)
+
   const onValid = (validForm: MessageForm) => {
     mutate(
       (prev) =>
@@ -123,13 +125,13 @@ const ChatDetail: NextPage = () => {
             </div>
             <div className="flex flex-col space-y-2">
               <span className="text-sm text-gray-700 dark:text-white">
-                {data?.product?.title}
+                {data?.product?.name}
               </span>
               <span className="text-sm font-semibold">
                 {data?.product?.price
                   ?.toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                원
+                $
               </span>
             </div>
           </div>
@@ -150,8 +152,8 @@ const ChatDetail: NextPage = () => {
               </div>
               <form className="mb-4" onSubmit={handleSubmit(onValid)}>
                 <Input
-                  position={"relative"}
-                  kind="chat"
+                  name="message"
+                  kind="text"
                   register={register("message", { required: true })}
                 />
               </form>

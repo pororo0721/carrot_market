@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import SubmitBtn from "@components/button";
+import Button from "@components/button";
 import Layout from "@components/layout";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
@@ -105,9 +105,9 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             <p className=" my-6 text-gray-700">{product?.description || <Skeleton/>}</p>
             <div className="flex items-center justify-between space-x-2">
             <form className="w-full" onSubmit={handleSubmit(onVaild)}>
-                <SubmitBtn
-                  position={`py-2`}
-                  title={loading ? "Loading...." : "Talk to seller"}
+                <Button
+                  large
+                  text={loading ? "Loading...." : "Talk to seller"}
                   mine={
                     userData?.profile?.id === data?.product?.userId
                       ? true

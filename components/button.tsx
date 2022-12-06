@@ -1,26 +1,26 @@
-import React, { useState } from "react";
+import { cls } from "@libs/client/utils";
 
-interface SubmitBtnProps {
-  title: string;
+interface ButtonProps {
+  large?: boolean;
+  text: string;
   [key: string]: any;
-  mine?: boolean;
 }
 
-export default function SubmitBtn({
-  title,
-  position,
-  mine = false,
-}: SubmitBtnProps) {
+export default function Button({
+  large = false,
+  onClick,
+  text,
+  ...rest
+}: ButtonProps) {
   return (
     <button
-      disabled={mine}
-      className={`${position} ${
-        mine
-          ? ` bg-gray-300 hover:bg-gray-400 focus:bg-gray-400 rounded-md w-full py-2 px-3 text-white shadow-sm outline-none dark:bg-slate-600`
-          : "bg-orange-500 rounded-md w-full py-2 px-3 text-white shadow-sm hover:bg-orange-600 outline-none"
-      } `}
+      {...rest}
+      className={cls(
+        "w-full bg-orange-500 hover:bg-orange-600 text-white  px-4 border border-transparent rounded-md shadow-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none",
+        large ? "py-3 text-base" : "py-2 text-sm "
+      )}
     >
-      {mine ? "It is impossible." : title}
+      {text}
     </button>
   );
 }
