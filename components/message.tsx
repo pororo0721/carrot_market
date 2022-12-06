@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useRef } from "react";
+import React from "react";
 
 interface MessageProps {
   text: string;
@@ -22,7 +22,7 @@ export default function Message({ text, mine, avatar }: MessageProps) {
             width={40}
             height={40}
             alt="profile"
-            src={`https://imagedelivery.net/xE6X7mlbIExkQau-XHoj-A/${avatar}/profile`}
+            src={`https://images.unsplash.com/photo-1557246565-8a3d3ab5d7f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80`}
             className="rounded-full bg-gray-300 z-0"
             quality={100}
           />
