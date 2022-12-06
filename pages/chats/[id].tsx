@@ -128,10 +128,10 @@ const ChatDetail: NextPage = () => {
                 {data?.product?.name}
               </span>
               <span className="text-sm font-semibold">
-                {data?.product?.price
+              $ {data?.product?.price
                   ?.toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                $
+                
               </span>
             </div>
           </div>

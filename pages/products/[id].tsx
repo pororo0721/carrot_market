@@ -99,7 +99,6 @@ const ItemDetail: NextPage<ItemDetailResponse> = ({
             <p className=" my-6 text-gray-700">{product?.description || <Skeleton/>}</p>
             </div>
           
-
           <div className="mt-5">
        
             <div className="flex items-center justify-between space-x-2">
