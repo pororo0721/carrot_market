@@ -63,13 +63,11 @@ const ChatDetail: NextPage = () => {
     }
   };
   useEffect(() => {
-    if (chatRoomId && lastMessage) {
-      console.log("i'm running");
+    if (chatRoomId && lastMessage ) {
       setInterval(deleteNotification, 3000);
     }
   }, [chatRoomId, lastMessage]);
 
-  console.log(data?.product?.id)
 
   const onValid = (validForm: MessageForm) => {
     mutate(
@@ -107,7 +105,7 @@ const ChatDetail: NextPage = () => {
 
   return (
     <>
-      <Layout canGoBack hasTabBar>
+      <Layout canGoBack seoTitle="Chat Room">
         <div className="md:mx-auto md:max-w-4xl mt-10">
           <div className="relative pb-4 border-b w-full opacity-80 flex items-center space-x-3 ">
             <div className="ml-5">
@@ -152,9 +150,12 @@ const ChatDetail: NextPage = () => {
               </div>
               <form className="mb-4" onSubmit={handleSubmit(onValid)}>
                 <Input
-                  name="string"
-                  type="chat"
+                  name="chat"
+                  label="Chat"
+                  kind="chat"
+                  type = "text"
                   register={register("message", { required: true })}
+                  required
                 />
               </form>
             </div>
