@@ -44,18 +44,18 @@ const ChatDetail: NextPage = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const { register, handleSubmit, reset } = useForm<MessageForm>();
   const [send] = useMutation<MessageResponse>(
-    `/api/chatRoom/${chatRoomId}/messages`
+    `/api/chats/${chatRoomId}/messages`
   );
   const { data, mutate } = useSWR<ChatRoomResponse>(
-    chatRoomId ? `/api/chatRoom/${chatRoomId}` : null,
+    chatRoomId ? `/api/chats/${chatRoomId}` : null,
     {
       refreshInterval: 300,
       revalidateOnFocus: true,
     }
   );
   const { data: userData } = useSWR("/api/users/me");
-  const [countingNoti] = useMutation(`/api/chatRoom/notification`);
-  const [deleteNoti] = useDelete(`/api/chatRoom/notification`);
+  const [countingNoti] = useMutation(`/api/chats/notification`);
+  const [deleteNoti] = useDelete(`/api/chats/notification`);
   const lastMessage = data?.chatRoom?.messages[data?.chatRoom?.messages.length - 1];
   const deleteNotification = () => {
     if (lastMessage?.user.id !== userData?.profile?.id) {
