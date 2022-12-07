@@ -56,7 +56,7 @@ const ChatDetail: NextPage = () => {
   const { data: userData } = useSWR("/api/users/me");
   const [countingNoti] = useMutation(`/api/chats/notification`);
   const [deleteNoti] = useDelete(`/api/chats/notification`);
-  console.log(data?.chatRoom?.messages);
+
   const lastMessage = data?.chatRoom?.messages?.slice(-1)[0];
   const deleteNotification = () => {
     if (lastMessage?.user.id !== userData?.profile?.id) {

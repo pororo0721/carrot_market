@@ -10,7 +10,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     body,
   } = req;
   const message = await client.messages.create({
+
     data: {
+      
       message: body.message,
       chatRoom: {
         connect: {
