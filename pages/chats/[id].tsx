@@ -56,7 +56,8 @@ const ChatDetail: NextPage = () => {
   const { data: userData } = useSWR("/api/users/me");
   const [countingNoti] = useMutation(`/api/chats/notification`);
   const [deleteNoti] = useDelete(`/api/chats/notification`);
-  const lastMessage = data?.chatRoom?.messages[data?.chatRoom?.messages.length - 1];
+  console.log(data?.chatRoom?.messages);
+  const lastMessage = data?.chatRoom?.messages?.slice(-1)[0];
   const deleteNotification = () => {
     if (lastMessage?.user.id !== userData?.profile?.id) {
       deleteNoti({ chatRoomId });
@@ -112,6 +113,7 @@ const ChatDetail: NextPage = () => {
               <Link href={`/products/${data?.product?.id}`}>
                 <a>
                   <Image
+                    src=""
                     alt="product"
                     width={70}
                     height={70}
@@ -151,7 +153,7 @@ const ChatDetail: NextPage = () => {
               <form className="mb-4" onSubmit={handleSubmit(onValid)}>
                 <Input
                   name="chat"
-                  label="Chat"
+                  label="Please enter your message"
                   kind="chat"
                   type = "text"
                   register={register("message", { required: true })}
