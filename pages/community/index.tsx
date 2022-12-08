@@ -30,7 +30,7 @@ interface PostResponse {
 const Community: NextPage<PostResponse> = ({posts}) => {
   const {latitude, longitude} = useCoords();
   const { data } = useSWR<PostResponse>(latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null);
-  const {page, setPage} = usePage();
+  const [{page, setPage}, pagination] = usePage("/api/community");
   const router = useRouter();
 
   const handlePageChange = (page: number) => {
@@ -110,7 +110,7 @@ const Community: NextPage<PostResponse> = ({posts}) => {
             ></path>
           </svg>
         </FloatingButton>
-        <Pagenation page={page} setPage={handlePageChange} />
+        <Pagenation {...pagination}  />
       </div>
     </Layout>
   );
