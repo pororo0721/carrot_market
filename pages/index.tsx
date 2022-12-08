@@ -13,6 +13,7 @@ import usePage from "@libs/client/usePage";
 export interface ProductWithCounts extends Product {
   _count: {
     favs: number;
+    chats: number;
   };
 }
 
@@ -28,7 +29,7 @@ const Home: NextPage = () => {
   const [{ data: dataJson }, pagination] =
   usePage<ProductWithCounts>("/api/products");
   return (
-    <Layout title="홈" hasTabBar>
+    <Layout title="홈" hasTabBar seoTitle="Home">
        <Head>
         <title>Home</title>
       </Head>
@@ -39,7 +40,7 @@ const Home: NextPage = () => {
             key={product.id}
             title={product.name}
             price={product.price}
-            comments={1}
+            comments={product._count.chats}
             hearts={product._count.favs}
             image={product.image}
           />
