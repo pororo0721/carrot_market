@@ -16,7 +16,7 @@ interface StreamsResponse {
 const Streams: NextPage = () => {
   const [{ data: json }, pageHandler] = usePage<Stream>(`/api/streams`);
   return (
-    <Layout hasTabBar title="라이브">
+    <Layout hasTabBar title="라이브" seoTitle="Live Stream">
       <div className=" divide-y-[1px] space-y-4">
       {json?.list?.map((stream) => (
           <Link key={stream.id} href={`/streams/${stream.id}`}>
