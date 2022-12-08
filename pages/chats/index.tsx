@@ -139,7 +139,7 @@ const Chats: NextPage = () => {
 // };
 
 
-    <Layout hasTabBar title="채팅"  >
+    <Layout hasTabBar title="채팅" seoTitle="Chats" >
       <div className="divide-y-[1px] ">
 
         {data?.chatRooms?.map((chatRoom: any) => (
