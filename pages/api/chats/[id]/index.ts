@@ -18,7 +18,7 @@ async function handler(
     },
     include: {
       sendUser: true,
-    receiveUser: true,
+      receiveUser: true,
       messages: {
         select: {
           id: true,

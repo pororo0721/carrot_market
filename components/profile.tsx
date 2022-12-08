@@ -56,7 +56,7 @@ export default function ProfileInfo({
             {avatar ? (
               <img
                 alt="profile"
-                src={`https://imagedelivery.net/xE6X7mlbIExkQau-XHoj-A/${avatar}/profile`}
+                src=""
                 className="w-16 h-16 md:w-32 md:h-32 rounded-full"
               />
             ) : (
@@ -80,7 +80,7 @@ export default function ProfileInfo({
             alt="profile"
             width={40}
             height={40}
-            src={`https://imagedelivery.net/xE6X7mlbIExkQau-XHoj-A/${avatar}/profile`}
+            src=""
             className="w-16 h-16 rounded-full"
             quality={100}
           />
