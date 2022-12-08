@@ -190,7 +190,7 @@ model Messages {
   userId      Int
   message     String  @db.MediumText
   stream    Stream? @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId      Int
+  streamId      Int?
   chatRoom  ChatRoom @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId      Int
 
