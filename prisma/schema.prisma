@@ -196,7 +196,7 @@ model Messages {
 
   @@index([userId])
   @@index([streamId])
-   @@index([chatRoomId])
+  @@index([chatRoomId])
 }
 
 model ChatRoom{
