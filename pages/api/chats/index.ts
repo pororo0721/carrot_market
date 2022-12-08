@@ -29,8 +29,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             updatedAt: "desc",
           },
         },
-        buyer: true,
-        seller: true,
+        sendUser: true,
+        receiveUser: true,
         _count: {
           select: {
             notifications: true,
