@@ -7,6 +7,8 @@ import useSWR from "swr";
 import { ChatRoom, Messages, User } from "@prisma/client";
 import { useState } from "react";
 import useDelete from "@libs/client/useDelete";
+import Pagenation from "@components/pagination";
+import usePage from "@libs/client/usePage";
 import timeForToday from "@libs/client/timeForToday";
 
 interface ChatRoomWith extends ChatRoom {
@@ -27,6 +29,8 @@ interface ChatRoomResponse {
 const Chats: NextPage = () => {
   const router = useRouter();
   const {data: userData} = useSWR("/api/users/me");
+  const [{ data: dataJson }, pagination] =
+  usePage("/api/chats");
   const {data} = useSWR<ChatRoomResponse>("/api/chats");
   const[active, setActive] = useState(false);
   const activeDeleteBtn = () => {
@@ -152,9 +156,19 @@ const Chats: NextPage = () => {
                 <p className="text-gray-700">📮: {chatRoom.receiveUser.name}</p>
                 <p className="text-gray-700">💬: {chatRoom.messages[0]?.message}</p>
               </div>
+              <div className="mr-4 space-x-2 flex items-center">
+              <span className="text-xs text-gray-400 mr-5 ">
+                      {timeForToday(
+                 Number(new Date(`${chatRoom.messages[0].updatedAt}`))
+             )}
+                  </span>
+
+              </div>
+  
             </a>
           </Link>
         ))}
+        <Pagenation {...pagination} />
       </div>
     </Layout>
   );
