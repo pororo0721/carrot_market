@@ -6,7 +6,7 @@ import Input from "@components/input";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import { useRouter } from "next/router";
-
+import emailjs from "@emailjs/browser";
 
 interface EnterForm {
   email?: string;

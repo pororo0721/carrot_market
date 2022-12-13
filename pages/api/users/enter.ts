@@ -3,6 +3,7 @@ import twilio from "twilio";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "@libs/server/client";
+import { withApiSession } from "@libs/server/withSession";
 
 mail.setApiKey(process.env.SENDGRID_APIKEY!);
 
@@ -30,14 +31,24 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       },
     },
   });
-  if (phone){
+  setTimeout(
+    async () =>
+      await client.token.deleteMany({
+        where: {
+          id: token?.id,
+        },
+      }),
+    600000
+  );
+
+  // if (phone){
  /*    const message = await twilioClient.messages.create({
       messagingServiceSid: process.env.TWILIO_MSID,
       to: process.env.MY_PHONE!,
       body: `Your login token is ${payload}`,
     });
     console.log(message); */
-  } else if(email) {
+  // } else if(email) {
     /* const email = await mail.send({
       from: process.env.MY_EMAIL,
       to: process.env.MY_EMAIL,
@@ -46,7 +57,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       html: `<strong>Your token is ${payload}</strong>`,
     });
     console.log(email); */
-  }
+  // }
 
 
   return res.json({
@@ -55,4 +66,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   });
 }
 
-export default withHandler({methods:["POST"], handler, isPrivate: false});
+export default withApiSession(withHandler({methods:["POST"], handler}));
