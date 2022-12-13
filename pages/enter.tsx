@@ -8,6 +8,7 @@ import { cls } from "@libs/client/utils";
 import { useRouter } from "next/router";
 import emailjs from "@emailjs/browser";
 
+
 interface EnterForm {
   email?: string;
   phone?: string;
@@ -38,9 +39,29 @@ const Enter: NextPage = () => {
     reset();
     setMethod("phone");
   };
-  const onValid = (validForm: EnterForm) => {
+  const payload = Math.floor(100000 + Math.random() * 900000) +"";
+  const onValid = async({email, phone}: EnterForm) => {
     if (loading) return;
-    enter(validForm);
+    await enter({ email, phone, payload });
+    const templateParams = {
+      token: payload,
+      email,
+    };
+    await emailjs
+      .send(
+        "service_olp5a0c",
+        "template_7hmb3i9",
+        templateParams,
+        "SWezrDEQKs8kVfJME"
+      )
+      .then(
+        function (response) {
+          console.log("SUCCESS!", response.status, response.text);
+        },
+        function (error) {
+          console.log("FAILED...", error);
+        }
+      );
   };
   const onTokenValid = (validForm: TokenForm) => {
     if (tokenLoading) return;
