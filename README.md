@@ -22,3 +22,12 @@ yarn create next-app
 ### After the installation is complete:
 
 Run ```npm run dev```or ```yarn dev ```to start the development server on http://localhost:3000.
+
+### Preview
+
+1.Log In
+
+![image](https://user-images.githubusercontent.com/79802132/207607578-f8c5b924-ee9b-480c-9ac7-031dac1ad896.png)
+
+![image](https://user-images.githubusercontent.com/79802132/207607448-6f9c1c49-947e-4949-85e6-7455d866993f.png)
+
