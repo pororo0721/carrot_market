@@ -44,7 +44,7 @@ Run ```npm run dev```or ```yarn dev ```to start the development server on http:/
 
 ### Preview
 
-1.Log In
+1. Log In
 - Token generation upon entering email or mobile phone number
 - create user
 - Storing user information in session through iron session when entering token
