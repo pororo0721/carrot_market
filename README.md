@@ -54,8 +54,8 @@ Run ```npm run dev```or ```yarn dev ```to start the development server on http:/
 <hr />
 
 4.Chat with product sellers via chat
--When Talk to seller button is clicked, a chatRoom is created in the backend based on the sellerId and the user (clicked user) in the session.
--If the chat room is created normally, the backend transmits ok: true through res.json and the chatRoomId in the data. When ok: true is confirmed using useEffect in the frontend, move to the created chat room (set the path through chatRoomId in data)
+- When Talk to seller button is clicked, a chatRoom is created in the backend based on the sellerId and the user (clicked user) in the session.
+- If the chat room is created normally, the backend transmits ok: true through res.json and the chatRoomId in the data. When ok: true is confirmed using useEffect in the frontend, move to the created chat room (set the path through chatRoomId in data)
 
 ![Chat with product sellers via chat](https://user-images.githubusercontent.com/79802132/207620478-325f8a4b-2e55-4862-9725-e8f73eec7cb9.png)
 
