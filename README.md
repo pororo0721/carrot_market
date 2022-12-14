@@ -68,6 +68,15 @@ Run ```npm run dev```or ```yarn dev ```to start the development server on http:/
 
 <hr />
 
-6. 
+6. chatting
+
+- You can live chat with product sellers.
+- Similar to product details, as soon as a messenger is entered through mutation in useSWR, the entered messenger text is immediately reflected on the user's screen
+- Immediately after being reflected on the screen, the backend creates actual data with the input messenger.
+
+![chatting](https://user-images.githubusercontent.com/79802132/207623293-0694af3d-07a3-4f95-9e33-1fcde916b29f.png)
+
+<hr />
+
 
 
