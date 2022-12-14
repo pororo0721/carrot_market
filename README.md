@@ -1,7 +1,7 @@
 # Carrot Market
 Serverless Carrot Market Clone using NextJS, Tailwind, Prisma, PlanetScale and Cloudflare.
 
-## Getting Started
+### Getting Started
 
 
 ```bash
@@ -15,10 +15,10 @@ yarn create next-app
 
 ``` npm i next@latest react@rc react-dom@rc ```
 
-## Get started with Tailwind CSS
+### Get started with Tailwind CSS
 
 ```npm install -D tailwindcss postcss autoprefixer ```
 
-## After the installation is complete:
+### After the installation is complete:
 
 Run ```npm run dev```or ```yarn dev ```to start the development server on http://localhost:3000.
