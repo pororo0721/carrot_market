@@ -1,5 +1,5 @@
 # Carrot Market
-Serverless Carrot Market Clone using NextJS, Tailwind, Prisma, PlanetScale and Cloudflare.
+Serverless Carrot Market Clone using NextJS, React, Typescript Tailwind, Prisma, PlanetScale and Cloudflare.
 
 ### Stack
 
