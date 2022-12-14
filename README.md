@@ -27,6 +27,6 @@ Run ```npm run dev```or ```yarn dev ```to start the development server on http:/
 
 1.Log In
 
+![enter](https://user-images.githubusercontent.com/79802132/207608921-34dc890b-495d-4135-9da1-f51ce7a8834d.png)
 
-![enter](https://user-images.githubusercontent.com/79802132/207608395-edf4ed71-a517-4605-a4a9-1ab7c2888353.png)
-![token](https://user-images.githubusercontent.com/79802132/207608408-808cb2bf-7901-4640-8380-ccea14f1b275.png)
+
