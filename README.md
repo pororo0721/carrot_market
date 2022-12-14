@@ -78,5 +78,9 @@ Run ```npm run dev```or ```yarn dev ```to start the development server on http:/
 
 <hr />
 
+7. Profile
+- You can change your name and information by editing your profile.
 
+
+![profile](https://user-images.githubusercontent.com/79802132/207625074-3faeeb12-ae4f-4729-ae33-979c9b598001.png)
 
